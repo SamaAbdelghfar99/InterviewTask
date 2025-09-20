@@ -19,15 +19,17 @@ class MainScreen extends StatelessWidget {
       builder: (context, state) {
         int currentIndex = 0;
 
-        // Extract current index based on state type
         if (state is NavigationState) {
           currentIndex = state.selectedIndex;
         } else if (state is PostLoaded || state is PostLoading || state is PostError) {
-          currentIndex = 0; // Assume we're on home tab for post-related states
+          currentIndex = 0;
         }
 
         return Scaffold(
-          appBar: AppBar(title: Text("sama".tr())),
+          appBar: AppBar(
+            title: Text("sama".tr()),
+            centerTitle: true,
+          ),
           body: IndexedStack(
             index: currentIndex,
             children: _pages,
@@ -39,11 +41,11 @@ class MainScreen extends StatelessWidget {
             },
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: const Icon(Icons.home),
                 label: "home".tr(),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
                 label: "settings".tr(),
               ),
             ],
