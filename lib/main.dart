@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interview_task/features/home/controller/home_bloc.dart';
@@ -5,8 +6,14 @@ import 'package:interview_task/main_screen.dart';
 
 import 'core/repo/post_repository.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('ar')],
+      path: 'assets/translations', // <-- change the path of the translation files
+      fallbackLocale: Locale('en'),
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +25,10 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => HomeBloc(PostRepository())..add(FetchPosts()),
       child: MaterialApp(
-        title: 'Bloc Bottom Navigation',
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
         home: const MainScreen(),
       ),

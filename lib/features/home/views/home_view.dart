@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:interview_task/features/home/controller/home_bloc.dart';
@@ -27,11 +28,13 @@ class HomePage extends StatelessWidget {
                 borderSide: const BorderSide(color: Colors.white, width: 2.0),
                 borderRadius: BorderRadius.circular(12),
               ),
-              hintText: 'Search',
+              hintText: "search".tr(),
               hintStyle: const TextStyle(color: Colors.grey),
             ),
-            onChanged: (query){
-              homeBloc.add(SearchPosts(query));
+            onChanged: (query) {
+              if (homeBloc.state is PostLoaded || homeBloc.state is NavigationState) {
+                homeBloc.add(SearchPosts(query));
+              }
             },
           ),
           // Posts List
@@ -42,7 +45,7 @@ class HomePage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is PostLoaded) {
                   if (state.posts.isEmpty) {
-                    return const Center(child: Text("No posts found"));
+                    return  Center(child: Text("noPostsFound".tr()));
                   }
                   return ListView.builder(
                     itemCount: state.posts.length,

@@ -8,11 +8,18 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final PostRepository repository;
   List<Post> _allPosts = [];
+  int _currentIndex = 0;
 
-  HomeBloc(this.repository) : super(NavigationState(0)) {
+  HomeBloc(this.repository) : super(HomeInitialState()) {
     // Navigation
     on<NavigateTo>((event, emit) {
-      emit(NavigationState(event.index));
+      _currentIndex = event.index;
+      if (event.index == 0 && _allPosts.isNotEmpty) {
+        // When navigating to home tab and we have posts, show them
+        emit(PostLoaded(_allPosts));
+      } else {
+        emit(NavigationState(event.index));
+      }
     });
 
     // Fetch posts
